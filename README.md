@@ -1,2 +1,2 @@
-# Alexouille
-Un petit test
+# svmExample
+# Un exemple d'utilisation des SVM
