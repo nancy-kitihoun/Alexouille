@@ -13,9 +13,35 @@ library(tree)
 library(caret)
 library(parallelSVM)
 library(gbm)
+library(ggvis)
+library(PRROC)
+library(pROC)
+
 
 options(shiny.maxRequestSize=150*1024^2)
 
+
+undersampling = function(data, p, position)
+{
+    summary = table(data[,position])
+    
+    m_event_value = names(summary)[which.max(table(data[,position]))]
+    
+    m_event_index = which(data[,position]==m_event_value)
+    
+    m_event_length = length(m_event_index)
+    
+    data_length = nrow(data)
+    
+    new_m_event_length = floor(data_length - (data_length-m_event_length)/p)
+    
+    new_index = sample(m_event_index,size=new_m_event_length)
+    
+    new_data = data[-new_index,]
+    
+    new_data
+    
+}
 
 plot_num_density <- function (data, path_out = NA) 
 {
@@ -30,63 +56,27 @@ plot_num_density <- function (data, path_out = NA)
     plot(p)
 }
 
-tabl=function(data,b){
-    
-    set.seed(123)
-    attach(data)
-    da1=data[Class==1,]
-    
-    dao=data[Class==0,]
-    no=nrow(dao)
-    
-    p=which(Class==0)
-    
-    ind=sample(p, no*b)
-    part=data[ind,]
-    
-    new=rbind(part,da1)
-    neawdat=sample(1:nrow(new),nrow(new))
-    newdata=new[neawdat,]
-    attach(newdata)
-    newdata
-}
 
-# b pouvent aller de 0,001 à 0.005
-
-# ind=sample(2, nrow(data()), replace=TRUE ,prob=c(0.7, 0.3))
-# 
-# train=data[ind==1,]
-# test=data[ind==2,]
-# 
-# 
-# und=reactive({
-#   s=ovun.sample(Class~., data=train(), method="under", N=1000)
-#   s$data
-#   
-# })  
 
 shinyServer(function(input, output,session) {
     
-    #importation 
-    
-    #saveRDS(data,file='C:/Users/camille/Desktop/Documents/GitHub/Application/genre/creditcard.rds')
-    
+    #data=reactive({
+    # read.table("D:/M2/SVM/creditcard.csv", header =T ,sep = ",")
+    # })
     data=reactive({
-        readRDS(file='D:/Github/Appli/genre/genre/creditcard.rds')
+        readRDS(file='D:/Github/Alexouille/creditcard.rds')
     })
     
+    set.seed(1234)
     
-    
-})
-set.seed(1234)
-
-output$dataTable = DT::renderDataTable( {
-    datatable(data(), extensions = 'FixedColumns',editable = 'cell',
-              rownames = F, options = list(pageLength = 5, dom = 'tp',scrollX = TRUE,
-                                           fixedColumns = TRUE),
-              selection = list(mode = "single",
-                               target = "column", selected = 4)
-    )
+    output$dataTable = DT::renderDataTable( {Sys.sleep(1)
+        datatable(data(), extensions = 'FixedColumns',editable = 'cell',
+                  rownames = F, options = list(pageLength = 5, dom = 'tp',scrollX = TRUE,
+                                               fixedColumns = TRUE),
+                  selection = list(mode = "single",
+                                   target = "column", selected = 4)
+        )
+    })
 })
 
 
