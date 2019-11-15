@@ -91,7 +91,7 @@ dashboardPage(title = "Détection des fraudes sur les cartes de crédits",
                   
                   tabItems(
                       # Read data
-                      tabItem(tabName = "intro", includeText("intro.txt")),    
+                      tabItem(tabName = "intro", includeMarkdown("Intro.rmd")),    
                       
                       
                       
