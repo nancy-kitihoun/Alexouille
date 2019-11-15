@@ -14,8 +14,7 @@ library(caret)
 library(parallelSVM)
 library(gbm)
 library(ggvis)
-library(PRROC)
-library(pROC)
+
 
 
 options(shiny.maxRequestSize=150*1024^2)
