@@ -16,8 +16,20 @@ apt_packages:
 r_packages:
   - rsconnect
   - shiny
-  - tidyverse
-  - kableExtra
+  - shinydashboard
+  - DT
+  - reshape
+  - funModeling
+  - GGally
+  - dplyr
+  - datasets
+  - ggplot2
+  - e1071
+  - randomForest
+  - tree
+  - caret
+  - parallelSVM
+  - gbm
   
 script:
   - R -f deploy.R
