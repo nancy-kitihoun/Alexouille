@@ -30,6 +30,7 @@ r_packages:
   - caret
   - parallelSVM
   - gbm
+  - ggvis
   
 script:
   - R -f deploy.R
