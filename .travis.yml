@@ -31,6 +31,9 @@ r_packages:
   - parallelSVM
   - gbm
   - ggvis
+  - pROC
+  - PRROC
+  - ROCR
   
 script:
   - R -f deploy.R
