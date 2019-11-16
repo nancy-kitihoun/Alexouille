@@ -9,7 +9,7 @@ dashboardPage(
   
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Introduction", tabName = "intro", icon = icon("home")),
+      menuItem("Introduction", tabName = "Intro", icon = icon("home")),
       menuItem("Données", tabName = "datafile", icon = icon("table")),
       menuItem("Analyse", tabName = "analysis", icon = icon("chart-bar")
       ),
@@ -91,7 +91,7 @@ dashboardPage(
     
     tabItems(
       
-      tabItem(tabName = "intro", includeMarkdown("intro.rmd")),
+      tabItem(tabName = "Intro", includeMarkdown("Intro.rmd")),
       
       # Read data
       
