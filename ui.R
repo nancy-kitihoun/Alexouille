@@ -94,7 +94,7 @@ dashboardPage(
     
     tabItems(
       
-      tabItem(tabName = "intro", includeHTML("intro.html")),
+      #tabItem(tabName = "intro", includemar("intro.html")),
       
       # Read data
       
