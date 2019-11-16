@@ -1,4 +1,5 @@
 
+library(markdown)
 library(PRROC)
 library(pROC)
 library(ROCR)
@@ -94,7 +95,7 @@ dashboardPage(
     
     tabItems(
       
-      #tabItem(tabName = "intro", includemar("intro.html")),
+      tabItem(tabName = "intro", includeMarkdown("intro.md")),
       
       # Read data
       
