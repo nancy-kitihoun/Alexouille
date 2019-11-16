@@ -91,7 +91,7 @@ dashboardPage(
     
     tabItems(
       
-      tabItem(tabName = "intro", includeMarkdown("Intro.rmd")),
+      tabItem(tabName = "intro", includeMarkdown("intro.rmd")),
       
       # Read data
       
