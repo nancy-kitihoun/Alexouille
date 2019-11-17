@@ -1,4 +1,3 @@
-
 library(markdown)
 library(shiny)
 library(shinydashboard)
@@ -223,10 +222,10 @@ shinyServer(function(input, output,session) {
     
     
     #confus=reactive({
-        #glm.probs=predict(A4(),test(), type="response")
-        #glm.pred=rep(0,nrow(test()))
-        #glm.pred[glm.probs>.5]=1
-        #confusionMatrix(as.factor(glm.pred), test()$Class, positive = "1")
+    #glm.probs=predict(A4(),test(), type="response")
+    #glm.pred=rep(0,nrow(test()))
+    #glm.pred[glm.probs>.5]=1
+    #confusionMatrix(as.factor(glm.pred), test()$Class, positive = "1")
     #})
     #output$perflog=renderPrint({confusionMatrix(as.factor(confus()), test()$Class, positive = "1")})
     
