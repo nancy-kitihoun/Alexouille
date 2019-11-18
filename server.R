@@ -19,10 +19,7 @@ library(ROCR)
 library(PRROC)
 library(pROC)
 
-
-
-options(shiny.maxRequestSize=150*1024^2)
-
+options(shiny.maxRequestSize=1500*1024^2)
 
 
 under = function(data, pro)
@@ -156,17 +153,17 @@ shinyServer(function(input, output,session) {
         
         svm(Class ~., data = appren(),
             kernel = "linear",
-            type = "C-classification")
+            type = "C-classification",probability=TRUE)
     })
     A1=eventReactive(input$proportion, {svm_result()})
     output$svm1=renderPrint(A1())
     
     
     a=reactive({
-        predict(A1(),test()[,1:30])
+        predict(A1(),test()[,1:30],probability=TRUE)
     })
     #predicte()
-    output$performence =renderPrint({confusionMatrix(predict(A1(),newdata=test()),test()$Class,positive="1")
+    output$performence =renderPrint({confusionMatrix(predict(A1(),newdata=test(),probability=TRUE),test()$Class,positive="1")
     })
     q= reactive({
         p= roc.curve(a(),as.factor(test()$Class),curve = TRUE,max.compute = TRUE, 
@@ -187,7 +184,7 @@ shinyServer(function(input, output,session) {
     
     
     
-    output$treroc=renderPrint({ Sys.sleep(1)
+    output$treroc=renderPrint({ 
         
         tree.pred=predict(A2(),newdata=test(),type="class")
         
@@ -221,23 +218,72 @@ shinyServer(function(input, output,session) {
     
     
     
-    #confus=reactive({
-    #glm.probs=predict(A4(),test(), type="response")
-    #glm.pred=rep(0,nrow(test()))
-    #glm.pred[glm.probs>.5]=1
-    #confusionMatrix(as.factor(glm.pred), test()$Class, positive = "1")
-    #})
-    #output$perflog=renderPrint({confusionMatrix(as.factor(confus()), test()$Class, positive = "1")})
+    confus=reactive({
+        glm.probs=predict(A4(),test(), type="response")
+        glm.pred=rep(0,nrow(test()))
+        glm.pred[glm.probs>.5]=1
+        confusionMatrix(as.factor(glm.pred), test()$Class, positive = "1")
+    })
+    output$perflog=renderPrint({confus()})
+    
+    #-------------------------Courbe ROC
+    
+    
+    # svm marche
+    rocc=eventReactive(input$proportion,{
+        rocsvmq=attributes(a())$probabilities[,2]
+        pred=prediction(rocsvmq,test()$Class)
+        per=performance(pred,"tpr","fpr")
+        auc_vm=performance(pred,"auc")
+        auc_vm=unlist(slot(auc_vm,"y.values"))
+        eq = paste0("auc_svm = ", round(auc_vm,4),"_bleu")
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        #logis: arbre ne marche pas
+        
+        #roc1=eventReactive(input$proportion,
+        #{
+        # tree.pre=predict(A2(),newdata=test(),type = "class")[,2]
+        
+        # pred1=prediction(tree.pre,test()$Class)
+        # as.numeric(performance(pred1, "tpr","fpr")@y.values)
+        
+        #plot(performance(pred1,"tpr","fpr"),color=T)
+        
+        #++++++++++++++++++++++++++++++++++++++++++++++++                
+        #logisti: marche
+        
+        pree=predict(A4(),test(), type="response")
+        pre=prediction(pree,test()$Class)
+        preee=performance(pre,"tpr","fpr")
+        auc_logis=performance(pre,"auc")
+        auc_logis=unlist(slot(auc_logis,"y.values"))
+        eq2 = paste0("auc_logis = ", round(auc_logis,4),"_vert")
+        
+        #+++++++++++++++++++++++++++++++++++++++++++++++++
+        # pour le gradient boos marche
+        
+        pred.boo=predict(A3(), newdata=test(), n.trees=500,type ='response',interaction=4)
+        preboo=prediction(pred.boo,test()$Class)
+        preboos=performance(preboo,"tpr","fpr")
+        
+        auc_gradBoost=performance(preboo,"auc")
+        auc_gradBoost=unlist(slot(auc_gradBoost,"y.values"))
+        eq3 = paste0("auc_gradBoost = ", round(auc_gradBoost,4),"_rouge")
+        
+        #++++++++++++++++++++++++++++++++++++++++++++++++  
+        
+        plot(per,col="blue" ,main=c(eq,eq2,eq3),xlab=("1-spécificité"),ylab=("sensitivité"), print.auc=T)
+        plot(preee,col="green",add=T)
+        plot(preboos,col="red",add=T)
+        abline(a=0,b=1)
+        legend( "bottomright", legend=c("svm","logis","gradBoost"),
+                col=c("blue","green","red"),box.lty=2, box.lwd=2)
+    })
+    
+    
+    
+    output$roc=renderPlot({rocc()})
+    
     
 })
-
-
-
-
-
-
-
-
-
-
 
