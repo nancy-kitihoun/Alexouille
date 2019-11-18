@@ -1,3 +1,4 @@
+library(kableExtra)
 library(markdown)
 library(PRROC)
 library(pROC)
@@ -110,8 +111,8 @@ dashboardPage(
       #Introduction 
       tabItem(tabName = "paper", 
               
-              tags$iframe(style = "height:600px; width:100%; scrolling=yes", 
-                          src = "docs/Notice.pdf")),
+              box( title="Telechargement", 
+                   downloadButton("notice", "Télecharger la notice de ce démonstrateur en PDF"))),
       
       tabItem(tabName = "intro", includeMarkdown("intro.md")), 
       
@@ -162,8 +163,8 @@ dashboardPage(
                                          sliderInput("taille", "Choisir la taille des données" , min=1000, max=100000, value=500
                                          ),
                                          actionButton(inputId="graph", "Go!"),
-                                         p("Click the button to update the value displayed in the main panel.",br(),
-                                           "NB:Augmentation de la taile des donnéess augmentera le temps d'exécution ")),
+                                         p("Cliquez le bouton pour actualiser les données.",br(),
+                                           "NB:Augmentation de la taile des données augmentera le temps d'exécution ")),
                                        
                                        mainPanel( plotOutput("plot2")))),
                      tabPanel("Stat.descriptives2",
@@ -172,7 +173,7 @@ dashboardPage(
                                 box( title="Fréquence de la variable cible Classe",status = "primary",  plotOutput("Grap2", height = "300px"),tags$footer(tags$em("Proportion des 0 et 1  dans la variable dépendante"))),
                                 box( title="Corrélation", plotOutput("tabCor") ,status = "primary",tags$footer(tags$em("En probabilité et en statistique, 
                               la corrélation entre plusieurs variables aléatoires ou statistiques est une notion de liaison qui contredit leur indépendance.
-                               Ici  nous avons des variables très peu correler entre elles "))))
+                               Ici  nous avons des variables très peu correlées entre elles "))))
                      ),
                      tabPanel("Densité des variables", tatus= "primary",width = 24,
                               plotOutput("Grap3", width = "100%" ),tags$footer(tags$em("Les variables sont toutes centrées sur zéro "))
@@ -186,7 +187,7 @@ dashboardPage(
                   sliderInput("prop", "Choisir la propotion des 0 dans l'echantillon d'apprentissage" , min=0.01, max=1, value=0.7
                   ),
                   actionButton(inputId="proportion", "Go!"),
-                  p("Cliquez le bouton pour actualiser les données dans le panneau.",br(),
+                  p("Cliquez le bouton pour actualiser les données .",br(),
                     "NB:",br(),"- L'Augmentation de la taile des données augmentera le temps d'exécution. ",
                     br(),
                     "-Plus on tend vers 1 moins il y a de zéros dans l'échantillon d'apprentissage")),
@@ -197,9 +198,9 @@ dashboardPage(
                          
                          tabPanel("SVM", 
                                   fluidPage(
-                                    box(width = 6, verbatimTextOutput("svm1"),status = "primary", title="Sortie svm", tags$footer(tags$em("En
+                                    box(width = "100%", verbatimTextOutput("svm1"),status = "primary", title="Sortie SVM", tags$footer(tags$em("En
                                     fonction de la valeur mise par défaut on constate un taux d'exactitude de 0.9195 "))),
-                                    box(width=6,verbatimTextOutput("performence"),status = "primary",title="Matrice de confusion")),
+                                    box(width="100%",verbatimTextOutput("performence"),status = "primary",title="Matrice de confusion")),
                                   
                                   
                                   
@@ -207,16 +208,16 @@ dashboardPage(
                          ),
                          tabPanel("Arbre de classification",
                                   fluidPage(
-                                    box(width = 6, verbatimTextOutput("tree"),status = "primary", title="sortie tree",tags$footer(tags$em("Misclassification error rate est ici 
+                                    box(width = "100%", verbatimTextOutput("tree"),status = "primary", title="Sortie arbre de classification",tags$footer(tags$em("Misclassification error rate est ici 
                                                     le taux d'erreur d'apprentissage. Comme nous pouvons le voir il est faible "))),
-                                    box(width = 6, plotOutput("arbre", height = "300px" ),status = "primary"),
-                                    box(width = 6, verbatimTextOutput("treroc"),status = "primary")
+                                    box(width = "100%", plotOutput("arbre", height = "300px" ),status = "primary"),
+                                    box(width = "100%", verbatimTextOutput("treroc"),status = "primary")
                                     
                                     
                                   )),
                          tabPanel("Gradient boosting",
                                   fluidPage(
-                                    box(width = 6, plotOutput("gradient"),status = "primary", title="Gradient boosting",tags$footer(tags$em("Le graphe
+                                    box(width = 6, plotOutput("gradient"),status = "primary", title="Estimation avec le gradient boosting",tags$footer(tags$em("Le graphe
                                     ci-dessus nous affiche les variables en fonction de leur degré d'importance.
                                     La performance est également très satisfaisante : taux d'exactitude de 0.9215
                             
@@ -226,8 +227,8 @@ dashboardPage(
                          ),
                          tabPanel("Logistique",
                                   fluidPage(
-                                    box(width = 6, verbatimTextOutput("logs"),status = "primary", title="Logistique"),
-                                    box(width = 6, verbatimTextOutput("perflog" ),status = "primary",title="performance")
+                                    box(width = "100%", verbatimTextOutput("logs"),status = "primary", title="Estimation avec la logistique"),
+                                    box(width = "100%", verbatimTextOutput("perflog" ),status = "primary",title="Performance")
                                     
                                     
                                   )),tabPanel("Comparaison des modèles",

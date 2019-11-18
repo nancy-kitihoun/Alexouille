@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = FALSE)
 *Les variables explicatives:*
 
 ```{r,echo = FALSE, warning = FALSE}
-data2=readRDS(file='genre/creditcard.rds')
+data2=readRDS(file='creditcard.rds')
 names(data2)
 ```
 

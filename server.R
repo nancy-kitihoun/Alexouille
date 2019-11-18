@@ -1,3 +1,5 @@
+
+library(kableExtra)
 library(markdown)
 library(shiny)
 library(shinydashboard)
@@ -60,6 +62,32 @@ plot_num_density <- function (data, path_out = NA)
 
 
 shinyServer(function(input, output,session) {
+   
+    output$notice= downloadHandler(
+        filename = function() {
+            paste('test-PDF-', format(Sys.Date(), "%d-%m-%Y"), '.pdf', sep='')
+        },
+        content = function(con) {
+            fileRmd   <- paste0("genre/", "Notice.Rmd")
+            fileTex   <- paste("genre/pdfTest_", Sys.Date(), ".tex", sep = "")
+            folderTex <- paste0("genre/pdfTest_", Sys.Date(), "_files")
+            
+            try(detach("package:kableExtra", unload = TRUE))
+            try(detach("package:rmarkdown", unload = TRUE))
+            
+            options(kableExtra.latex.load_packages = FALSE)
+            library(kableExtra)
+            library(rmarkdown)
+            
+            try(rmarkdown::render(fileRmd,
+                                  pdf_document(latex_engine = "pdflatex"),
+                                  output_file = con,
+                                  encoding = "UTF-8",
+                                  clean = TRUE))
+            
+            unlink(folderTex, recursive = T) })
+        
+    
     
     #data=reactive({
     # read.table("D:/M2/SVM/creditcard.csv", header =T ,sep = ",")
@@ -236,7 +264,7 @@ shinyServer(function(input, output,session) {
         per=performance(pred,"tpr","fpr")
         auc_vm=performance(pred,"auc")
         auc_vm=unlist(slot(auc_vm,"y.values"))
-        eq = paste0("auc_svm = ", round(auc_vm,4),"_bleu")
+        eq = paste0("Auc_svm = ", round(auc_vm,4))
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         #logis: arbre ne marche pas
         
@@ -257,7 +285,7 @@ shinyServer(function(input, output,session) {
         preee=performance(pre,"tpr","fpr")
         auc_logis=performance(pre,"auc")
         auc_logis=unlist(slot(auc_logis,"y.values"))
-        eq2 = paste0("auc_logis = ", round(auc_logis,4),"_vert")
+        eq2 = paste0("Auc_logis = ", round(auc_logis,4))
         
         #+++++++++++++++++++++++++++++++++++++++++++++++++
         # pour le gradient boos marche
@@ -268,15 +296,15 @@ shinyServer(function(input, output,session) {
         
         auc_gradBoost=performance(preboo,"auc")
         auc_gradBoost=unlist(slot(auc_gradBoost,"y.values"))
-        eq3 = paste0("auc_gradBoost = ", round(auc_gradBoost,4),"_rouge")
+        eq3 = paste0("Auc_gradBoost = ", round(auc_gradBoost,4))
         
         #++++++++++++++++++++++++++++++++++++++++++++++++  
         
-        plot(per,col="blue" ,main=c(eq,eq2,eq3),xlab=("1-spÃ©cificitÃ©"),ylab=("sensitivitÃ©"), print.auc=T)
+        plot(per,col="blue" ,main=c(eq,eq2,eq3),xlab=("1-specificity"),ylab=("sensitivity"), print.auc=T)
         plot(preee,col="green",add=T)
         plot(preboos,col="red",add=T)
         abline(a=0,b=1)
-        legend( "bottomright", legend=c("svm","logis","gradBoost"),
+        legend( "bottomright", legend=c("svm: bleu","logis: vert","gradBoost: rouge"),
                 col=c("blue","green","red"),box.lty=2, box.lwd=2)
     })
     
@@ -286,4 +314,8 @@ shinyServer(function(input, output,session) {
     
     
 })
+    
+
+    
+    
 
