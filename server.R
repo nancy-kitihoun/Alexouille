@@ -179,7 +179,7 @@ shinyServer(function(input, output,session) {
     output$tree=renderPrint({ Sys.sleep(1);
         summary(A2())})
     
-    output$abre= renderPlot({plot(A2())
+    output$arbre= renderPlot({plot(A2())
         text(A2(), pretty=0)    })
     
     
@@ -272,7 +272,7 @@ shinyServer(function(input, output,session) {
         
         #++++++++++++++++++++++++++++++++++++++++++++++++  
         
-        plot(per,col="blue" ,main=c(eq,eq2,eq3),xlab=("1-spécificité"),ylab=("sensitivité"), print.auc=T)
+        plot(per,col="blue" ,main=c(eq,eq2,eq3),xlab=("1-spÃ©cificitÃ©"),ylab=("sensitivitÃ©"), print.auc=T)
         plot(preee,col="green",add=T)
         plot(preboos,col="red",add=T)
         abline(a=0,b=1)

@@ -2,12 +2,14 @@
 title: "Détection de fraude sur les cartes de crédit"
 author: "AZANGHO Camille,KITIHOUN Adeline, MAKHOKH Lamyae"
 date: "15/11/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ### <span style="color: #F7230C"> Introduction</span> :
@@ -30,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
 *Les variables explicatives:*
 
 ```{r,echo = FALSE, warning = FALSE}
-data2=readRDS(file='C:/Users/Hp/Documents/GitHub/Application/genre/creditcard.rds')
+data2=readRDS(file='genre/creditcard.rds')
 names(data2)
 ```
 
@@ -86,7 +88,8 @@ names(data2)
 ###  <span style="color: #1FA055"> 4- Comparaison des différentes méthodes</span> 
 
 
-*On peut conclure que la technique....*
+*Selon la taille de l'échantillon et l'equilibrage du jeu de données on a des résultats différents au niveau des performences.*
+*On remarque cependant que la méthode du Gradient Boosting donne de meilleurs résultats. *
 
 
 
@@ -114,6 +117,5 @@ names(data2)
 *. Moins efficace sur les jeux de données contenant du bruits et beaucoup d'outliers.*
 
 
-*De plus il n'est pas aussi performent que...*
 
 

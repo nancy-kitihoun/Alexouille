@@ -11,7 +11,7 @@ library(shinydashboard)
 
 
 dashboardPage(
-  dashboardHeader(title = "Détection des fraudes sur les cartes de crédits", titleWidth=800,dropdownMenu(type = "tasks", badgeStatus = "success",
+  dashboardHeader(title = "Détection de la fraude sur les cartes de crédits", titleWidth=800,dropdownMenu(type = "tasks", badgeStatus = "success",
                                                                                                            
                                                                                                            
                                                                                                            taskItem(value = 75, color = "aqua",
@@ -28,7 +28,7 @@ dashboardPage(
       menuItem("Données", tabName = "datafile", icon = icon("table")),
       menuItem("Analyse", tabName = "analysis", icon = icon("chart-bar")
       ),
-      menuItem("Paper", tabName = "paper", icon = icon("file-pdf-o")),
+      menuItem("Notice", tabName = "paper", icon = icon("file-pdf-o")),
       hr(),
       sidebarUserPanel(name = a("Camille AZANGHO",
                                 href = "https://www.univ-orleans.fr/deg/masters/ESA/etu/promo_M22020.html"),
@@ -108,6 +108,10 @@ dashboardPage(
       # Read data
       
       #Introduction 
+      tabItem(tabName = "paper", 
+              
+              tags$iframe(style = "height:600px; width:100%; scrolling=yes", 
+                          src = "docs/Notice.pdf")),
       
       tabItem(tabName = "intro", includeMarkdown("intro.md")), 
       
@@ -121,12 +125,12 @@ dashboardPage(
                      tabPanel("Stat.descriptives1",
                               fluidPage(
                                 box(width = 12, status = "primary",
-                                    title=("Une idée des données"), 
+                                    title=("Aperçu des données"), 
                                     DT::dataTableOutput("dataTable")
                                 ),
                                 
                                 box(status = "primary", 
-                                    title=(" simple statistique descriptive"),
+                                    title=(" Quelques statistiques descriptives"),
                                     DT::dataTableOutput("Des1")),
                                 
                                 box(status = "primary",tags$footer(tags$em(
@@ -135,7 +139,7 @@ dashboardPage(
                                   "le nombre de valeur infinies (q_inf) et son pourcentage (p_inf)",br())),
                                   
                                   DT::dataTableOutput("Des2")))),
-                     tabPanel("relation entre les variables",
+                     tabPanel("Relations entre les variables",
                               
                               
                               
@@ -159,16 +163,16 @@ dashboardPage(
                                          ),
                                          actionButton(inputId="graph", "Go!"),
                                          p("Click the button to update the value displayed in the main panel.",br(),
-                                           "NB:Augmentation de la taile des données augmentera , le temps exécution ")),
+                                           "NB:Augmentation de la taile des donnéess augmentera le temps d'exécution ")),
                                        
                                        mainPanel( plotOutput("plot2")))),
                      tabPanel("Stat.descriptives2",
                               
                               fluidPage(
-                                box( title="fréquence de la variables Classe",status = "primary",  plotOutput("Grap2", height = "300px"),tags$footer(tags$em("Proportion des 0 et 1  dans la variable dépendante"))),
-                                box( title="Corrélation", plotOutput("tabCor") ,status = "primary",tags$footer(tags$em("En probabilités et en statistique, 
+                                box( title="Fréquence de la variable cible Classe",status = "primary",  plotOutput("Grap2", height = "300px"),tags$footer(tags$em("Proportion des 0 et 1  dans la variable dépendante"))),
+                                box( title="Corrélation", plotOutput("tabCor") ,status = "primary",tags$footer(tags$em("En probabilité et en statistique, 
                               la corrélation entre plusieurs variables aléatoires ou statistiques est une notion de liaison qui contredit leur indépendance.
-                               Ici  nous avons des varaiables trés peu correler entre elles "))))
+                               Ici  nous avons des variables très peu correler entre elles "))))
                      ),
                      tabPanel("Densité des variables", tatus= "primary",width = 24,
                               plotOutput("Grap3", width = "100%" ),tags$footer(tags$em("Les variables sont toutes centrées sur zéro "))
@@ -179,13 +183,13 @@ dashboardPage(
               
               sidebarLayout(
                 sidebarPanel(
-                  sliderInput("prop", "Choisir la propotion des 0 dan l'echantillon d'apprentissage" , min=0.01, max=1, value=0.7
+                  sliderInput("prop", "Choisir la propotion des 0 dans l'echantillon d'apprentissage" , min=0.01, max=1, value=0.7
                   ),
                   actionButton(inputId="proportion", "Go!"),
-                  p("Click the button to update the value displayed in the main panel.",br(),
-                    "NB:",br(),"- L'Augmentation de la taile des données augmentera , le temps exécution. ",
+                  p("Cliquez le bouton pour actualiser les données dans le panneau.",br(),
+                    "NB:",br(),"- L'Augmentation de la taile des données augmentera le temps d'exécution. ",
                     br(),
-                    "-Plus on tend vers 1 moin il y a de zéro dans échantillon d'apprentissage")),
+                    "-Plus on tend vers 1 moins il y a de zéros dans l'échantillon d'apprentissage")),
                 
                 
                 mainPanel(
@@ -193,35 +197,40 @@ dashboardPage(
                          
                          tabPanel("SVM", 
                                   fluidPage(
-                                    box(width = 6, verbatimTextOutput("svm1"),status = "primary", title="sortie svm"),
-                                    box(width=6,verbatimTextOutput("performence"),status = "primary",title="matrice de confusion")),
+                                    box(width = 6, verbatimTextOutput("svm1"),status = "primary", title="Sortie svm", tags$footer(tags$em("En
+                                    fonction de la valeur mise par défaut on constate un taux d'exactitude de 0.9195 "))),
+                                    box(width=6,verbatimTextOutput("performence"),status = "primary",title="Matrice de confusion")),
                                   
                                   
                                   
                                   
                          ),
-                         tabPanel("Abre de classification",
+                         tabPanel("Arbre de classification",
                                   fluidPage(
                                     box(width = 6, verbatimTextOutput("tree"),status = "primary", title="sortie tree",tags$footer(tags$em("Misclassification error rate est ici 
-                                                    le taux d'erreure d'apprentissage. Comme nous pouvons le voir est faible "))),
-                                    box(width = 6, plotOutput("abre", height = "300px" ),status = "primary"),
+                                                    le taux d'erreur d'apprentissage. Comme nous pouvons le voir il est faible "))),
+                                    box(width = 6, plotOutput("arbre", height = "300px" ),status = "primary"),
                                     box(width = 6, verbatimTextOutput("treroc"),status = "primary")
                                     
                                     
                                   )),
-                         tabPanel("gradient boosting",
+                         tabPanel("Gradient boosting",
                                   fluidPage(
-                                    box(width = 6, plotOutput("gradient"),status = "primary", title="gradient boosting"),
+                                    box(width = 6, plotOutput("gradient"),status = "primary", title="Gradient boosting",tags$footer(tags$em("Le graphe
+                                    ci-dessus nous affiche les variables en fonction de leur degré d'importance.
+                                    La performance est également très satisfaisante : taux d'exactitude de 0.9215
+                            
+                                                                                                                "))),
                                     box(width = 6, verbatimTextOutput("perfgradient" ),status = "primary"))
                                   
                          ),
-                         tabPanel("logistique",
+                         tabPanel("Logistique",
                                   fluidPage(
-                                    box(width = 6, verbatimTextOutput("logs"),status = "primary", title="logistique"),
+                                    box(width = 6, verbatimTextOutput("logs"),status = "primary", title="Logistique"),
                                     box(width = 6, verbatimTextOutput("perflog" ),status = "primary",title="performance")
                                     
                                     
-                                  )),tabPanel("comparaison des modéles",
+                                  )),tabPanel("Comparaison des modèles",
                                               fluidPage(
                                                 
                                                 plotOutput("roc")
